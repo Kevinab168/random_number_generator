@@ -14,10 +14,16 @@ def driver():
     driver_options.add_argument("--no-sandbox")
     driver_options.add_argument("--disable-dev-shm-usage")
     driver_options.add_argument("--headless")
-    with webdriver.Remote(driver_options) as driver:
+    with webdriver.Chrome(driver_options) as driver:
         yield driver
 
 
 def test_landing_page(driver, live_server, welcome):
     driver.get(live_server.url)
-    assert welcome in driver.page_source
+    # Find an input element
+    input = driver.find_element_by_css_selector("#user-guess")
+    submit = driver.find_element_by_css_selector(".submit-btn")
+    if input is not None and submit is not None:
+        assert True
+    else:
+        assert False
