@@ -10,11 +10,11 @@ def welcome():
 
 @pytest.yield_fixture
 def driver():
-    # driver_options = Options()
-    # driver_options.add_argument("--no-sandbox")
-    # driver_options.add_argument("--disable-dev-shm-usage")
-    # driver_options.add_argument("--headless")
-    with webdriver.Remote(command_executor="127.0.0.1:9515") as driver:
+    driver_options = Options()
+    driver_options.add_argument("--no-sandbox")
+    driver_options.add_argument("--disable-dev-shm-usage")
+    driver_options.add_argument("--headless")
+    with webdriver.Remote(driver_options) as driver:
         yield driver
 
 
