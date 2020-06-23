@@ -54,7 +54,11 @@ ROOT_URLCONF = 'random_number.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            '/mnt/c/Users/Kevin/documents'
+            '/linux_projects/random_number_guess/'
+            'random_number/random_number/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

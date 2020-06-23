@@ -14,7 +14,7 @@ def driver():
     driver_options.add_argument("--no-sandbox")
     driver_options.add_argument("--disable-dev-shm-usage")
     driver_options.add_argument("--headless")
-    with webdriver.Chrome(driver_options) as driver:
+    with webdriver.Chrome(chrome_options=driver_options) as driver:
         yield driver
 
 
