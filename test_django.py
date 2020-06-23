@@ -21,9 +21,9 @@ def driver():
 def test_landing_page(driver, live_server, welcome):
     driver.get(live_server.url)
     # Find an input element
-    input = driver.find_element_by_css_selector("#user-guess")
+    user_input = driver.find_element_by_css_selector("#user-guess")
     submit = driver.find_element_by_css_selector(".submit-btn")
-    if input is not None and submit is not None:
+    if user_input is not None and submit is not None:
         assert True
     else:
         assert False
