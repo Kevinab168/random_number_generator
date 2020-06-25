@@ -1,1 +1,1 @@
-![](https://github.com/actions/Kevinab168/workflows/Test-Django/badge.svg?branch=master)
+![(https://github.com/Kevinab168/random_number_generator/workflows/Test-Django/badge.svg)] ((https://github.com/Kevinab168/random_number_generator/workflows/Test-Django/badge.svg))
