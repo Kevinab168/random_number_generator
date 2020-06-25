@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'number_generation'
 ]
 
 MIDDLEWARE = [
@@ -54,11 +55,7 @@ ROOT_URLCONF = 'random_number.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            '/mnt/c/Users/Kevin/documents'
-            '/linux_projects/random_number_guess/'
-            'random_number/random_number/templates'
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
