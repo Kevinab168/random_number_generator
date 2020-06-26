@@ -43,3 +43,20 @@ def test_guess_random_number(driver, live_server):
     response_message = response_message.text
     assert 'success' in response_message.lower() or \
         'sorry' in response_message.lower()
+
+
+def test_try_again(driver, live_server):
+    driver.get(live_server.url)
+    user_input = driver.find_element_by_css_selector('.user-guess')
+    user_input.send_keys('12')
+    submit_button = driver.find_element_by_css_selector('.submit-btn')
+    submit_button.click()
+    # Find the try again button
+    try_again_button = driver.find_element_by_css_selector('.try-again')
+    try_again_button.click()
+    # Check inputs again
+    user_label = driver.find_element_by_css_selector('.user-label')
+    if user_label is not None:
+        assert True
+    else:
+        assert False
