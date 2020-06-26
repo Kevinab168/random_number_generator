@@ -16,7 +16,7 @@ def guess_msg(request):
         return render(request, "message.html", context)
     random_number = randint(min_number, max_number)
     if guessed_number == random_number:
-        text = "uccess! You have properly guessed the number"
+        text = "Success! You have properly guessed the number"
     else:
         text = "Sorry, that's not right. Try Again!"
     context = {'response': text}

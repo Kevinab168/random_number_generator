@@ -48,7 +48,7 @@ def test_guess_random_number(driver, live_server):
     submit_button.click()
     response_message = driver.find_element_by_css_selector('.response-message')
     response_message = response_message.text
-    assert 'Success' in response_message.lower() or \
+    assert 'success' in response_message.lower() or \
         'sorry' in response_message.lower()
 
 
