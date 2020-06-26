@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomePage</title>
-</head>
-<body>
-    <form action="#">
-        <label for="guess" class="user-label">Guess a Number</label>
-        <input type="number" name="guess" class="user-guess">
-        <input type="submit" value="Submit" class="submit-btn">
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<form action="/guess" method="post">
+    <label for="guess" class="user-label">Guess a Number</label>
+    <input type="number" name="guess" class="user-guess">
+    <input type="submit" value="Submit" class="submit-btn">
+</form>
+{% endblock %}
