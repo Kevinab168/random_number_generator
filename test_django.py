@@ -48,7 +48,7 @@ def test_guess_random_number(driver, live_server):
     submit_button.click()
     response_message = driver.find_element_by_css_selector('.response-message')
     response_message = response_message.text
-    assert 'success' in response_message.lower() or \
+    assert 'Success' in response_message.lower() or \
         'sorry' in response_message.lower()
 
 
@@ -77,7 +77,7 @@ def test_limits(driver, live_server):
     driver.get(live_server.url)
     min_input = driver.find_element_by_css_selector('.min-level')
     min_input.send_keys('1')
-    max_input = driver.find_element_by_css_selector('.max-input')
+    max_input = driver.find_element_by_css_selector('.max-level')
     max_input.send_keys('10')
     user_input = driver.find_element_by_css_selector('.user-guess')
     user_input.send_keys('123')
