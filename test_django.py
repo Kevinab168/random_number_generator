@@ -38,8 +38,12 @@ def test_check_label(driver, live_server):
 
 def test_guess_random_number(driver, live_server):
     driver.get(live_server.url)
+    min_input = driver.find_element_by_css_selector('.min-level')
+    min_input.send_keys('1')
+    max_input = driver.find_element_by_css_selector('.max-input')
+    max_input.send_keys('10')
     user_input = driver.find_element_by_css_selector('.user-guess')
-    user_input.send_keys('12')
+    user_input.send_keys('5')
     submit_button = driver.find_element_by_css_selector('.submit-btn')
     submit_button.click()
     response_message = driver.find_element_by_css_selector('.response-message')
