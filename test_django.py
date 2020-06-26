@@ -27,7 +27,10 @@ def test_landing_page(driver, live_server):
 def test_check_label(driver, live_server):
     driver.get(live_server.url)
     user_label = driver.find_element_by_css_selector('.user-label')
-    if user_label is not None:
+    min_label = driver.find_element_by_css_selector('.min-num-lab')
+    max_label = driver.find_element_by_css_selector('.max-num-lab')
+    if user_label is not None and min_label is not None and \
+       max_label is not None:
         assert True
     else:
         assert False
@@ -60,3 +63,17 @@ def test_try_again(driver, live_server):
         assert True
     else:
         assert False
+
+
+def test_limits(driver, live_server):
+    driver.get(live_server.url)
+    min_input = driver.find_element_by_css_selector('.min-level')
+    min_input.send_keys('1')
+    max_input = driver.find_element_by_css_selector('.max-input')
+    max_input.send_keys('10')
+    user_input = driver.find_element_by_css_selector('.user-guess')
+    user_input.send_keys('123')
+    submit_button = driver.find_element_by_css_selector('.submit-btn')
+    submit_button.click()
+    response_message = driver.find_element_by_css_selector('.response-message')
+    assert 'choose another number' in response_message.text.lower()

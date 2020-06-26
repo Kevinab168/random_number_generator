@@ -2,6 +2,10 @@
 {% block content %}
 <form action="/guess" method="post">
     {% csrf_token %}
+    <label for="min-num" class="min-num-lab">Minimum Number</label>
+    <input type="number" name="min-num">
+    <label for="max-num" class="max-num-lab">Maximum Number</label>
+    <input type="number" name="max-num">
     <label for="guess" class="user-label">Guess a Number</label>
     <input type="number" name="guess" class="user-guess">
     <input type="submit" value="Submit" class="submit-btn">
