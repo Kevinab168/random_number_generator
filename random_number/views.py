@@ -14,6 +14,7 @@ def guess_msg(request):
     else:
         text = "Sorry, that's not right. Try Again!"
     context = {
-        'response-text': text
+        'response': text
     }
+    print(context)
     return render(request, "message.html", context)

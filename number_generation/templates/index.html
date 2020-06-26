@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <form action="/guess" method="post">
+    {% csrf_token %}
     <label for="guess" class="user-label">Guess a Number</label>
     <input type="number" name="guess" class="user-guess">
     <input type="submit" value="Submit" class="submit-btn">
