@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p class="response-message">{{ response }}</p>
-<a href="/" class="try-again">Try Again</a>
+<div class="container">
+    <div class="row">
+        <p class="response-message">{{ response }}</p>
+        <a href="/" class="try-again waves-effect waves-light btn">Try Again</a>
+    </div>
+</div>
 {% endblock %}
