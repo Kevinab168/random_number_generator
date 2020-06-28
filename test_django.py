@@ -85,3 +85,11 @@ def test_limits(driver, live_server):
     submit_button.click()
     response_message = driver.find_element_by_css_selector('.response-message')
     assert 'choose another number' in response_message.text.lower()
+
+
+def test_empty_vals(driver, live_server):
+    driver.get(live_server.url)
+    submit_button = driver.find_element_by_css_selector('.submit-btn')
+    submit_button.click()
+    response_message = driver.find_element_by_css_selector('.response-message')
+    assert 'missing inputs' in response_message.text.lower()

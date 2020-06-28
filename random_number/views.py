@@ -7,9 +7,16 @@ def homepage(request):
 
 
 def guess_msg(request):
-    min_number = int(request.POST['min-num'])
-    max_number = int(request.POST['max-num'])
-    guessed_number = int(request.POST['guess'])
+    min_number = request.POST['min-num']
+    max_number = request.POST['max-num']
+    guessed_number = request.POST['guess']
+    if min_number == '' or max_number == '' or guessed_number == '':
+        text = "Missing Inputs. Please Try Again"
+        context = {'response': text}
+        return render(request, "message.html", context)
+    min_number = int(min_number)
+    max_number = int(max_number)
+    guessed_number = int(guessed_number)
     if guessed_number < min_number or guessed_number > max_number:
         text = "The number is out of bounds. Please choose another number"
         context = {'response': text}
