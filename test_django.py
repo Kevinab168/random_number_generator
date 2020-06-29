@@ -1,23 +1,28 @@
+import os
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-@pytest.yield_fixture
+@pytest.yield_fixture(scope='session')
 def driver():
-    driver_options = Options()
-    driver_options.add_argument("--no-sandbox")
-    driver_options.add_argument("--disable-dev-shm-usage")
-    driver_options.add_argument("--headless")
-    with webdriver.Chrome(chrome_options=driver_options) as driver:
+    if os.environ.get('CI'):
+        driver_options = Options()
+        driver_options.add_argument('--no-sandbox')
+        driver_options.add_argument('--disable-dev-shm-usage')
+        driver_options.add_argument('--headless')
+        driver = webdriver.Chrome(chrome_options=driver_options)
+    else:
+        driver = webdriver.Remote(command_executor='http://127.0.0.1:9515')
+    with driver:
         yield driver
 
 
 def test_landing_page(driver, live_server):
     driver.get(live_server.url)
     # Find an input element
-    user_input = driver.find_element_by_css_selector("input.user-guess")
-    submit = driver.find_element_by_css_selector(".submit-btn")
+    user_input = driver.find_element_by_css_selector('input.user-guess')
+    submit = driver.find_element_by_css_selector('.submit-btn')
     if user_input is not None and submit is not None:
         assert True
     else:
