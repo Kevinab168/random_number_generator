@@ -1,13 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>Random Number Guess</title>
 </head>
 <body>
-    <nav>
+    <nav class="mb-3 nav-bar">
         <div class="nav-wrapper">
           <a href="\" class="brand-logo">Random Number Guess</a>
         </div>

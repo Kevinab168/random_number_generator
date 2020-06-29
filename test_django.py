@@ -93,3 +93,9 @@ def test_empty_vals(driver, live_server):
     submit_button.click()
     response_message = driver.find_element_by_css_selector('.response-message')
     assert 'missing inputs' in response_message.text.lower()
+
+
+def test_style(driver, live_server):
+    driver.get(live_server.url)
+    nav_bar = driver.find_element_by_css_selector('.nav-bar')
+    assert 'mb-3' in nav_bar.get_attribute('class')
