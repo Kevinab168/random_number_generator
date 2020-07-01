@@ -1,0 +1,13 @@
+Spec doc
+
+The user chooses a lower and upper bound for the game. The user clicks a button and this creates a game. 
+A game stores a random number between the bounds specified by user. 
+
+
+The user goes to a game page. There is a label that says the game is in progress. There is a list of previously guessed numbers with the date time of the guess. 
+
+The user goes to a game page that is in progress.There is an input for a guess number. He puts in an incorrect guess and presses submit button. The value is added to the list. 
+
+The user goes to a game page that is in progress.There is an input for a guess number. He puts in an correct guess and presses submit button. The game is marked as finished. 
+
+The user goes to a game page. There is a label that says the game is finished. There is a label stating what the correct number is with the date and time of the entry. 

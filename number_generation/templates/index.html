@@ -2,22 +2,18 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <form action="/guess" method="post">
+        <form action="/games" method="post">
             {% csrf_token %}
             <div class="row">
-                <label for="min-num" class="min-num-lab">Minimum Number</label>
-                <input type="number" name="min-num" class="min-level">
+                <label for="min-num" class="">Minimum Number</label>
+                <input type="number" name="min-num" class="lower-bound">
             </div>
             <div class="row">
-                <label for="max-num" class="max-num-lab">Maximum Number</label>
-                <input type="number" name="max-num" class="max-level">
+                <label for="max-num">Maximum Number</label>
+                <input type="number" name="max-num" class="upper-bound">
             </div>
             <div class="row">
-                <label for="guess" class="user-label">Guess a Number</label>
-                <input type="number" name="guess" class="user-guess">
-            </div>
-            <div class="row">
-                <input type="submit" value="Submit" class="submit-btn red lighten-5">
+                <input type="submit" value="Create Game" class="submit-btn red lighten-5 create-game">
             </div>
         </form>
     </div>
