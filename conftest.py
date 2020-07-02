@@ -38,7 +38,7 @@ def driver():
 
 
 @pytest.fixture(scope='function')
-def create_game(driver, live_server, db):
+def create_game(driver, live_server, transactional_db):
     driver.get(live_server.url)
     lower_bound = driver.find_element_by_css_selector('.lower-bound')
     upper_bound = driver.find_element_by_css_selector('.upper-bound')
@@ -47,3 +47,13 @@ def create_game(driver, live_server, db):
 
     create_game = driver.find_element_by_css_selector('.create-game')
     create_game.click()
+
+
+@pytest.fixture
+def make_guess(driver, live_server):
+    def guess_it(value):
+        guess = driver.find_element_by_css_selector('.guess-number')
+        guess.send_keys(value)
+        submit = driver.find_element_by_css_selector('.submit-button')
+        submit.click()
+    return guess_it

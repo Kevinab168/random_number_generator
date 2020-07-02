@@ -1,4 +1,24 @@
 {% extends "base.html" %}
-
 {% block content %}
+<div class="container">
+        <h1>Game {{ game.pk }}</h1>
+    {% if game.in_progress == True %}
+        <h2 class="in-progress">Game In Progress</h2>
+    {% else %}
+        <h2 class="finished">Game Finished</h2>
+    {% endif %}
+</div>
+<div class="container previous-guesses">
+    <h3>Previous Attempts</h3>
+    {% for guess in guesses %}
+    <li class="guess-item">{{ guess.guess_value }} - {{ guess.guess_date }}</li>
+    {% endfor %}
+</div>
+<div class="container">
+    <form action="{% url 'my_game' gamepk %}" method="POST">
+        {% csrf_token %}
+        <input type="number" class="guess-number" name="guess-value">
+        <input type="submit" value="Submit" class="submit-button">
+    </form>
+</div>
 {% endblock content %}

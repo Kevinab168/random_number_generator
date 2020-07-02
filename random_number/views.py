@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from number_generation.models import Game
+from number_generation.models import Game, Guess
 
 
 def homepage(request):
@@ -19,7 +19,15 @@ def games(request):
 
 def game(request, game_num):
     my_game = get_object_or_404(Game, pk=game_num)
+    if request.method == 'POST':
+        guess_val = request.POST['guess-value']
+        print(guess_val)
+        new_guess = Guess(guess_value=guess_val, game=my_game)
+        new_guess.save()
+    guesses = Guess.objects.filter(game=my_game)
     context = {
-        'game': my_game
+        'game': my_game,
+        'gamepk': my_game.pk,
+        'guesses': guesses
     }
     return render(request, 'game.html', context)
