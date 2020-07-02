@@ -1,4 +1,5 @@
 import os
+import re
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -57,3 +58,14 @@ def make_guess(driver, live_server):
         submit = driver.find_element_by_css_selector('.submit-button')
         submit.click()
     return guess_it
+
+
+@pytest.fixture
+def get_primary_key(driver, live_server):
+    def action():
+        current_url = driver.current_url
+        pattern = r'.*games/([0-9]+)'
+        values = re.search(pattern, current_url)
+        my_pk = values.group(1)
+        return my_pk
+    return action

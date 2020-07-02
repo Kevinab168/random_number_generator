@@ -4,7 +4,7 @@
         <h1>Game {{ game.pk }}</h1>
     {% if game.in_progress == True %}
         <h2 class="in-progress">Game In Progress</h2>
-    {% else %}
+    {% elif game.in_progress == False %}
         <h2 class="finished">Game Finished</h2>
     {% endif %}
 </div>
@@ -17,8 +17,13 @@
 <div class="container">
     <form action="{% url 'my_game' gamepk %}" method="POST">
         {% csrf_token %}
-        <input type="number" class="guess-number" name="guess-value">
-        <input type="submit" value="Submit" class="submit-button">
+        {% if game.in_progress == True %}
+            <input type="number" class="guess-number" name="guess-value">
+            <input type="submit" value="Submit" class="submit-button">
+        {% else %}
+        <input type="number" class="guess-number" name="guess-value" disabled>
+        <input type="submit" value="Submit" class="submit-button" disabled>
+        {% endif %}
     </form>
 </div>
 {% endblock content %}

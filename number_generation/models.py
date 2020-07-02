@@ -1,15 +1,11 @@
 from django.db import models
-from random import randint
 
 
 class Game(models.Model):
     lower_bound = models.IntegerField(default=0)
     upper_bound = models.IntegerField(default=0)
     in_progress = models.BooleanField(default="True")
-
-    @property
-    def winning_num(self):
-        return randint(self.lower_bound, self.upper_bound)
+    winning_num = models.IntegerField(default=0)
 
 
 class Guess(models.Model):
