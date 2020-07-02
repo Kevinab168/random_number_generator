@@ -1,4 +1,3 @@
-import re
 from number_generation.models import Game
 
 
