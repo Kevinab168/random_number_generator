@@ -1,5 +1,4 @@
-from datetime import datetime
-from number_generation.models import Game, Guess
+from number_generation.models import Game
 
 
 def test_create_game(driver, create_game):
@@ -53,7 +52,7 @@ def test_game_page(
     back_button = driver.find_element_by_css_selector('.return-btn')
     back_button.click()
     game_row = driver.find_element_by_css_selector('.game-item')
-    completion_status = game_row.find_element_by_css_selector('.completion')      
+    completion_status = game_row.find_element_by_css_selector('.completion')
     my_game = Game.objects.filter(pk=primary_key)[0]
     assert 'Completed' in completion_status.text
     winning_guess = game_row.find_element_by_css_selector('.winning-guess')
