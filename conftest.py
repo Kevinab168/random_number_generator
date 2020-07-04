@@ -3,6 +3,7 @@ import re
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from number_generation.models import Game
 
 
 # @pytest.fixture
@@ -68,4 +69,13 @@ def get_primary_key(driver, live_server):
         values = re.search(pattern, current_url)
         my_pk = values.group(1)
         return my_pk
+    return action
+
+
+@pytest.fixture
+def make_winning_game(driver, live_server, create_game, make_guess):
+    def action(winning_pk):
+        my_game = Game.objects.filter(pk=winning_pk)[0]
+        winning_number = my_game.winning_num
+        make_guess(winning_number)
     return action

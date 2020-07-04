@@ -1,4 +1,5 @@
-from number_generation.models import Game
+from datetime import datetime
+from number_generation.models import Game, Guess
 
 
 def test_create_game(driver, create_game):
@@ -37,3 +38,26 @@ def test_correct_guess(driver, create_game, get_primary_key, make_guess):
     my_game = Game.objects.filter(pk=primary_key)[0]
     assert submit_button.get_attribute('disabled')
     assert my_game.in_progress is not True
+
+
+def test_game_page(
+    driver,
+    create_game,
+    get_primary_key,
+    make_guess,
+):
+    primary_key = get_primary_key()
+    my_game = Game.objects.filter(pk=primary_key)[0]
+    winning_number = my_game.winning_num
+    make_guess(winning_number)
+    back_button = driver.find_element_by_css_selector('.return-btn')
+    back_button.click()
+    game_row = driver.find_element_by_css_selector('.game-item')
+    completion_status = game_row.find_element_by_css_selector('.completion')
+    assert "Completed" in completion_status.text
+    winning_guess = game_row.find_element_by_css_selector('.winning-guess')
+    assert str(winning_number) in winning_guess.text
+    guess = Guess.objects.filter(game=my_game)
+    guess = guess[0]
+    formatted_date = datetime.strftime(guess.guess_date, '%B %d, %Y, %I:%M').lstrip("0").replace(" 0", " ")
+    assert formatted_date in winning_guess.text

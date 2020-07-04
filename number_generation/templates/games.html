@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Game</th>
+            <th>Progress</th>
+            <th>Winning Entry</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game_guess in games_guesses %}
+        <tr class="game-item">
+            <td class="game-number">Game - {{ game_guess.0.pk}}</td>
+            {% if game_guess.0.in_progress == True %} 
+                <td class="completion">On Going</td>
+            {% else %}
+                <td class="completion">Completed</td>
+            {% endif %}
+            {% if game_guess.1 == '?' %}
+                <td class="winning-guess">?</td>
+            {% else %}
+                <td class="winning-guess">{{ game_guess.1.0.guess_value }} - {{ game_guess.1.0.guess_date }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
