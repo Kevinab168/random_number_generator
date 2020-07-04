@@ -6,6 +6,7 @@
         <h2 class="in-progress">Game In Progress</h2>
     {% elif game.in_progress == False %}
         <h2 class="finished">Game Finished</h2>
+        <p class="winning-guess">Winning Guess: {{ winning_guess.guess_value }} - {{ winning_guess.guess_date }}</p>
     {% endif %}
 </div>
 <div class="container previous-guesses">

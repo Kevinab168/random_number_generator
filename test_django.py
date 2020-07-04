@@ -28,36 +28,35 @@ def test_incorrect_guess(driver, create_game, make_guess):
     assert '120' in element_text
 
 
-def test_correct_guess(driver, create_game, get_primary_key, make_guess):
+def test_correct_guess(driver, make_winning_game, get_primary_key, format_date):
     primary_key = get_primary_key()
-    my_game = Game.objects.filter(pk=primary_key)[0]
-    winning_number = my_game.winning_num
-    make_guess(winning_number)
+    make_winning_game(primary_key)
     assert driver.find_element_by_css_selector('.finished')
     submit_button = driver.find_element_by_css_selector('.submit-button')
     my_game = Game.objects.filter(pk=primary_key)[0]
     assert submit_button.get_attribute('disabled')
     assert my_game.in_progress is not True
+    displayed_guess = driver.find_element_by_css_selector('.winning-guess')
+    formatted_date = format_date(my_game)
+    assert formatted_date in displayed_guess.text
+    assert str(my_game.winning_num) in displayed_guess.text
 
 
 def test_game_page(
     driver,
-    create_game,
+    make_winning_game,
     get_primary_key,
-    make_guess,
+    format_date
 ):
     primary_key = get_primary_key()
-    my_game = Game.objects.filter(pk=primary_key)[0]
-    winning_number = my_game.winning_num
-    make_guess(winning_number)
+    make_winning_game(primary_key)
     back_button = driver.find_element_by_css_selector('.return-btn')
     back_button.click()
     game_row = driver.find_element_by_css_selector('.game-item')
-    completion_status = game_row.find_element_by_css_selector('.completion')
-    assert "Completed" in completion_status.text
+    completion_status = game_row.find_element_by_css_selector('.completion')      
+    my_game = Game.objects.filter(pk=primary_key)[0]
+    assert 'Completed' in completion_status.text
     winning_guess = game_row.find_element_by_css_selector('.winning-guess')
-    assert str(winning_number) in winning_guess.text
-    guess = Guess.objects.filter(game=my_game)
-    guess = guess[0]
-    formatted_date = datetime.strftime(guess.guess_date, '%B %d, %Y, %I:%M').lstrip("0").replace(" 0", " ")
+    assert str(my_game.winning_num) in winning_guess.text
+    formatted_date = format_date(my_game)
     assert formatted_date in winning_guess.text

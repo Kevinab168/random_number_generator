@@ -4,11 +4,11 @@ from random import randint
 
 
 def homepage(request):
-    return render(request, "index.html")
+    return render(request, 'index.html')
 
 
 def games(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         lower = request.POST['min-num']
         upper = request.POST['max-num']
         winning_number = randint(int(lower), int(upper))
@@ -33,19 +33,21 @@ def games(request):
 
 
 def game(request, game_num):
+    winning_guess = ''
     my_game = get_object_or_404(Game, pk=game_num)
     if request.method == 'POST':
         guess_val = int(request.POST['guess-value'])
+        new_guess = Guess(guess_value=guess_val, game=my_game)
         if guess_val == my_game.winning_num:
             my_game.in_progress = False
-        new_guess = Guess(guess_value=guess_val, game=my_game)
+            winning_guess = new_guess
         my_game.save()
         new_guess.save()
-    print(my_game.in_progress)
     guesses = Guess.objects.filter(game=my_game)
     context = {
         'game': my_game,
         'gamepk': my_game.pk,
-        'guesses': guesses
+        'guesses': guesses,
+        'winning_guess': winning_guess
     }
     return render(request, 'game.html', context)

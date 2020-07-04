@@ -3,26 +3,8 @@ import re
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from number_generation.models import Game
-
-
-# @pytest.fixture
-# def user_selects_between_1_and_10(driver, live_server):
-#     driver.get(live_server.url)
-#     min_input = driver.find_element_by_css_selector('.min-level')
-#     min_input.send_keys('1')
-#     max_input = driver.find_element_by_css_selector('.max-level')
-#     max_input.send_keys('10')
-
-
-# @pytest.fixture
-# def user_send_keys(driver, live_server):
-#     def action(value):
-#         user_input = driver.find_element_by_css_selector('.user-guess')
-#         user_input.send_keys(value)
-#         submit_button = driver.find_element_by_css_selector('.submit-btn')
-#         submit_button.click()
-#     return action
+from datetime import datetime
+from number_generation.models import Game, Guess
 
 
 @pytest.yield_fixture(scope='session')
@@ -78,4 +60,13 @@ def make_winning_game(driver, live_server, create_game, make_guess):
         my_game = Game.objects.filter(pk=winning_pk)[0]
         winning_number = my_game.winning_num
         make_guess(winning_number)
+    return action
+
+
+@pytest.fixture
+def format_date():
+    def action(my_game):
+        guess = Guess.objects.filter(game=my_game)[0]
+        formatted_date = datetime.strftime(guess.guess_date, '%B %d, %Y, %I:%M').lstrip('0').replace(' 0', ' ')
+        return formatted_date
     return action
