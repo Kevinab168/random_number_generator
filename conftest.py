@@ -68,5 +68,6 @@ def format_date():
     def action(my_game):
         guess = Guess.objects.filter(game=my_game)[0]
         formatted_date = datetime.strftime(guess.guess_date, '%B %d, %Y, %I:%M').lstrip('0').replace(' 0', ' ')
+        formatted_date = formatted_date.replace(':00', '')
         return formatted_date
     return action
