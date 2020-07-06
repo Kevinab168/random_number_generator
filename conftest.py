@@ -22,7 +22,7 @@ def driver():
 
 
 @pytest.fixture(scope='function')
-def create_game(driver, live_server, transactional_db):
+def create_game(driver, live_server):
     driver.get(live_server.url)
     lower_bound = driver.find_element_by_css_selector('.lower-bound')
     upper_bound = driver.find_element_by_css_selector('.upper-bound')
