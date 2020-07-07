@@ -1,10 +1,9 @@
 import os
-import re
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime
-from number_generation.models import Game, Guess, User
+from number_generation.models import Game, User
 
 
 @pytest.yield_fixture(scope='session')
@@ -46,6 +45,7 @@ def login(driver, live_server):
         log_in = driver.find_element_by_css_selector('[data-test="login"')
         log_in.click()
     return action
+
 
 @pytest.fixture
 def make_guess(driver, live_server):
