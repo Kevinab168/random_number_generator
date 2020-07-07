@@ -1,0 +1,7 @@
+{% extends "base_error.html" %}
+{% block error %}
+    {{ error }}
+{% endblock error %}
+{% block return_button%}
+<a data-test="log-in-button" class="waves-effect waves-light btn-large" href="{% url 'log_in' %}"><i class="material-icons left">cloud</i>Log In</a>
+{% endblock return_button %}

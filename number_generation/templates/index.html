@@ -2,18 +2,18 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <form action="{% url 'games' %}" method="post">
+        <form action="{% url 'games'  %}" method="post">
             {% csrf_token %}
             <div class="row">
                 <label for="min-num" class="">Minimum Number</label>
-                <input type="number" name="min-num" class="lower-bound">
+                <input type="number" name="min-num" class="lower-bound" data-test="lower-bound">
             </div>
             <div class="row">
                 <label for="max-num">Maximum Number</label>
-                <input type="number" name="max-num" class="upper-bound">
+                <input type="number" name="max-num" class="upper-bound" data-test="upper-bound">
             </div>
             <div class="row">
-                <input type="submit" value="Create Game" class="submit-btn red lighten-5 create-game">
+                <input type="submit" value="Create Game" class="submit-btn red lighten-5" data-test="create-game">
             </div>
         </form>
     </div>

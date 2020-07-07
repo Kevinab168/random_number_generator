@@ -13,6 +13,13 @@
     <nav class="nav-bar mb-3">
         <div class="nav-wrapper">
           <a href="\" class="brand-logo">Random Number Guess</a>
+          <ul id="nav-mobile" class="right">
+              {% if user.is_authenticated %}
+                <li data-test="logged-in-user">{{ user.username }}</li>
+                 <li><a href="{% url 'log_out' %}" data-test="logout">Log out</a></li>
+              {% endif %}
+              
+          </ul>
         </div>
     </nav>
     {% block content %}

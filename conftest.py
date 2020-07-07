@@ -4,7 +4,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from datetime import datetime
-from number_generation.models import Game, Guess
+from number_generation.models import Game, Guess, User
 
 
 @pytest.yield_fixture(scope='session')
@@ -23,15 +23,29 @@ def driver():
 
 @pytest.fixture(scope='function')
 def create_game(driver, live_server):
-    driver.get(live_server.url)
-    lower_bound = driver.find_element_by_css_selector('.lower-bound')
-    upper_bound = driver.find_element_by_css_selector('.upper-bound')
-    lower_bound.send_keys('1')
-    upper_bound.send_keys('100')
+    def action(lower=1, upper=100):
+        driver.get(live_server.url)
+        lower_bound = driver.find_element_by_css_selector('[data-test="lower-bound"]')
+        upper_bound = driver.find_element_by_css_selector('[data-test="upper-bound"]')
+        lower_bound.send_keys(lower)
+        upper_bound.send_keys(upper)
 
-    create_game = driver.find_element_by_css_selector('.create-game')
-    create_game.click()
+        create_game = driver.find_element_by_css_selector('[data-test="create-game"]')
+        create_game.click()
+    return action
 
+
+@pytest.fixture
+def login(driver, live_server):
+    def action(user, password):
+        driver.get(live_server.url + '/login')
+        username = driver.find_element_by_css_selector('[data-test="username"]')
+        username.send_keys(user.username)
+        password = driver.find_element_by_css_selector('[data-test="password"]')
+        password.send_keys('asdfjkasdf;lasdf')
+        log_in = driver.find_element_by_css_selector('[data-test="login"')
+        log_in.click()
+    return action
 
 @pytest.fixture
 def make_guess(driver, live_server):
@@ -41,17 +55,6 @@ def make_guess(driver, live_server):
         submit = driver.find_element_by_css_selector('.submit-button')
         submit.click()
     return guess_it
-
-
-@pytest.fixture
-def get_primary_key(driver, live_server):
-    def action():
-        current_url = driver.current_url
-        pattern = r'.*games/([0-9]+)'
-        values = re.search(pattern, current_url)
-        my_pk = values.group(1)
-        return my_pk
-    return action
 
 
 @pytest.fixture
@@ -65,9 +68,16 @@ def make_winning_game(driver, live_server, create_game, make_guess):
 
 @pytest.fixture
 def format_date():
-    def action(my_game):
-        guess = Guess.objects.filter(game=my_game)[0]
+    def action(guess):
         formatted_date = datetime.strftime(guess.guess_date, '%B %d, %Y, %I:%M').lstrip('0').replace(' 0', ' ')
         formatted_date = formatted_date.replace(':00', '')
         return formatted_date
+    return action
+
+
+@pytest.fixture
+def user():
+    def action(username, password):
+        new_user = User.objects.create_user(username=username, password=password)
+        return new_user
     return action

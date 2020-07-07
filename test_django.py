@@ -1,61 +1,98 @@
-from number_generation.models import Game
+from number_generation.models import Game, Guess
 
 
-def test_create_game(driver, create_game):
+def test_log_in(driver, live_server, login, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    assert driver.current_url == live_server.url + '/'
+    assert new_user.username in driver.page_source
+
+
+def test_log_out(driver, login, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    logout = driver.find_element_by_css_selector('[data-test="logout"]')
+    logout.click()
+    assert 'login/' in driver.current_url
+    assert new_user.username not in driver.page_source
+
+
+def test_create_game_non_user(driver, create_game):
+    create_game()
+    assert 'login/' in driver.current_url
+
+
+def test_create_game(driver, create_game, login, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game()
     assert '/games/1' in driver.current_url
-    games = Game.objects.filter(pk=1)
-    game = games[0]
-    winning_num = game.winning_num
-    assert winning_num in range(game.lower_bound, game.upper_bound)
+    game = Game.objects.all().last()
+    assert game.winning_num in range(game.lower_bound, game.upper_bound)
+    creator = driver.find_element_by_css_selector('[data-test="creator"]')
+    assert creator.text == game.created_by.username
+    assert driver.find_element_by_css_selector('[data-test="in-progress"]')
+    assert driver.find_element_by_css_selector('[data-test="previous-guesses"]')
 
 
-def test_game_in_progress(driver, create_game):
-    assert driver.find_element_by_css_selector('.in-progress')
-    assert driver.find_element_by_css_selector('.previous-guesses')
+def test_create_game_incorrect_bounds(driver, live_server, create_game, login, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game(lower=100, upper=1)
+    error_message = driver.find_element_by_css_selector('[data-test="error-message').text
+    assert 'lower bound is greater than upper bound' in error_message
+    home_button = driver.find_element_by_css_selector('[data-test="home-button"]')
+    home_button.click()
+    assert driver.current_url == live_server.url + '/'
 
 
-def test_incorrect_guess(driver, create_game, make_guess):
-    make_guess('120')
-    make_guess('300')
-    make_guess('500')
-    elements = driver.find_elements_by_css_selector('.guess-item')
-    element_text = []
-    for element in elements:
-        element_text_unfixed = element.text.split('-')[0]
-        element_text_fin = element_text_unfixed.strip()
-        element_text.append(element_text_fin)
-    assert '120' in element_text
+def test_incorrect_guess(driver, create_game, login, user, make_guess):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game(1, 100)
+    game = Game.objects.all().last()
+    winning_number = game.winning_num
+    guess_number = 43
+    if guess_number != winning_number:
+        make_guess(guess_number)
+    else:
+        guess_number = guess_number + 1
+        make_guess(guess_number)
+    guess = Guess.objects.all().last()
+    element = driver.find_element_by_css_selector('[data-test="incorrect-guess"]')
+    assert str(guess_number) in element.text
+    author_by = driver.find_element_by_css_selector('[data-test="author"]')
+    assert author_by.text == guess.created_by.username
 
 
-def test_correct_guess(driver, make_winning_game, get_primary_key, format_date):
-    primary_key = get_primary_key()
-    make_winning_game(primary_key)
-    assert driver.find_element_by_css_selector('.finished')
-    submit_button = driver.find_element_by_css_selector('.submit-button')
-    my_game = Game.objects.filter(pk=primary_key)[0]
-    assert submit_button.get_attribute('disabled')
-    assert my_game.in_progress is not True
-    displayed_guess = driver.find_element_by_css_selector('.winning-guess')
-    formatted_date = format_date(my_game)
-    assert formatted_date in displayed_guess.text
-    assert str(my_game.winning_num) in displayed_guess.text
+def test_make_guess_non_user(driver, live_server, create_game, login, user, make_guess):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game()
+    game = Game.objects.all().last()
+    logout = driver.find_element_by_css_selector('[data-test="logout"]')
+    logout.click()
+    driver.get(live_server + f'/games/{game.pk}')
+    make_guess(23)
+    error_message = driver.find_element_by_css_selector('[data-test="error-message"]')
+    assert 'must be logged in' in error_message.text
+    log_in_button = driver.find_element_by_css_selector('[data-test="log-in-button"]')
+    log_in_button.click()
+    assert 'login/' in driver.current_url
 
 
-def test_game_page(
-    driver,
-    make_winning_game,
-    get_primary_key,
-    format_date
-):
-    primary_key = get_primary_key()
-    make_winning_game(primary_key)
-    back_button = driver.find_element_by_css_selector('.return-btn')
-    back_button.click()
-    game_row = driver.find_element_by_css_selector('.game-item')
-    completion_status = game_row.find_element_by_css_selector('.completion')
-    my_game = Game.objects.filter(pk=primary_key)[0]
-    assert 'Completed' in completion_status.text
-    winning_guess = game_row.find_element_by_css_selector('.winning-guess')
-    assert str(my_game.winning_num) in winning_guess.text
-    formatted_date = format_date(my_game)
-    assert formatted_date in winning_guess.text
+def test_correct_guess(driver, create_game, make_guess, login, format_date, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game(1, 100)
+    game = Game.objects.all().last()
+    winning_number = game.winning_num
+    make_guess(winning_number)
+    winning_guess = Guess.objects.all().last()
+    displayed_winning_number = driver.find_element_by_css_selector('[data-test="winning-guess-item"]')
+    assert displayed_winning_number.text == str(winning_number)
+    displayed_winning_author = driver.find_element_by_css_selector('[data-test="winning-author"]').text
+    assert winning_guess.created_by.username == displayed_winning_author
+    displayed_winning_date = driver.find_element_by_css_selector('[data-test="winning-date"').text
+    formatted_date = format_date(winning_guess)
+    assert formatted_date in displayed_winning_date

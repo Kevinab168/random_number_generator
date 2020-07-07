@@ -1,19 +1,55 @@
 {% extends "base.html" %}
+{% if user %}
+    {% block user %}
+    {{ user.username }}
+    {% endblock %}
+{% endif %}
 {% block content %}
 <div class="container">
         <h1>Game {{ game.pk }}</h1>
+        <h3 >Created by:<span data-test="creator">{{ game.created_by }}</span></h3>
     {% if game.in_progress == True %}
-        <h2 class="in-progress">Game In Progress</h2>
+        <h2 data-test="in-progress">Game In Progress</h2>
     {% elif game.in_progress == False %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Winning Guess</th>
+                    <th>Guess Date</th>
+                    <th>Guessed By</th>
+                </tr>
+            </thead>
+            <tr>
+                <td data-test="winning-guess-item">{{ winning_guess.guess_value }}</td>
+                <td data-test="winning-date">{{ winning_guess.guess_date }}</td>
+                <td data-test="winning-author">{{ winning_guess.created_by.username }}</td>
+            </tr>
+        </table>
         <h2 class="finished">Game Finished</h2>
-        <p class="winning-guess">Winning Guess: {{ winning_guess.guess_value }} - {{ winning_guess.guess_date }}</p>
+        <p class="winning-guess">Winning Guess: <span data-test="guess-win-item">{{ winning_guess.guess_value }} 
+        </span> - <span>
+            {{ winning_guess.guess_date }}
+        </span></p>
     {% endif %}
 </div>
-<div class="container previous-guesses">
+<div class="container" data-test="previous-guesses">
     <h3>Previous Attempts</h3>
-    {% for guess in guesses %}
-    <li class="guess-item">{{ guess.guess_value }} - {{ guess.guess_date }}</li>
-    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Guess</th>
+                <th>Guess Date</th>
+                <th>Guessed By</th>
+            </tr>
+        </thead>
+        {% for guess in guesses %}
+        <tr>
+            <td data-test="incorrect-guess">{{guess.guess_value}}</td>
+            <td>{{guess.guess_date}}</td>
+            <td data-test="author">{{guess.created_by.username}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 <div class="container">
     <form action="{% url 'my_game' gamepk %}" method="POST">

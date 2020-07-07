@@ -1,0 +1,7 @@
+{% extends "base_error.html" %}
+{% block error %}
+    {{ error }}
+{% endblock error %}
+{% block return_button%}
+<a data-test="home-button" class="waves-effect waves-light btn-large" href="{% url 'homepage' %}"><i class="material-icons left">cloud</i>Go back</a>
+{% endblock return_button %}

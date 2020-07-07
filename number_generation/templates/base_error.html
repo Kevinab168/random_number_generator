@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Whoops Something went wrong...</h1>
+    <p data-test="error-message">{% block error %}{% endblock error %}</p>
+    {% block return_button %}
+    {% endblock return_button %}
+    
+</div>
+{% endblock content %}

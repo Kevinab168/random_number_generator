@@ -20,6 +20,8 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.homepage, name='homepage'),
-    path('games', views.games, name='games'),
-    path('games/<int:game_num>', views.game, name='my_game')
+    path('games/', views.games, name='games'),
+    path('games/<int:game_num>/', views.game, name='my_game'),
+    path('login/', views.log_in, name='log_in'),
+    path('logout/', views.log_out, name='log_out')
 ]
