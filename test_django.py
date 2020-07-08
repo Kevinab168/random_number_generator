@@ -96,3 +96,17 @@ def test_correct_guess(driver, create_game, make_guess, login, format_date, user
     displayed_winning_date = driver.find_element_by_css_selector('[data-test="winning-date"').text
     formatted_date = format_date(winning_guess)
     assert formatted_date in displayed_winning_date
+
+
+def test_show_all_games(driver, live_server, create_game, login, user):
+    new_user = user('User', 'asdfjkasdf;lasdf')
+    login(new_user, password='asdfjkasdf;lasdf')
+    create_game()
+    game = Game.objects.all().last()
+    driver.get(live_server.url)
+    show_all_games_button = driver.find_element_by_css_selector('[data-test="show_all_games"]')
+    show_all_games_button.click()
+    game_link = driver.find_element_by_css_selector('[data-test="game-name"]')
+    assert driver.find_element_by_css_selector('[data-test="game-progress"]')
+    game_link.click()
+    assert str(game.pk) in driver.current_url

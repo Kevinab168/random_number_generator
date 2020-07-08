@@ -2,26 +2,14 @@
 {% block content %}
 <table>
     <thead>
-        <tr>
-            <th>Game</th>
-            <th>Progress</th>
-            <th>Winning Entry</th>
-        </tr>
+        <th>Game</th>
+        <th>In Progress</th>
     </thead>
     <tbody>
-        {% for game_guess in games_guesses %}
-        <tr class="game-item">
-            <td class="game-number">Game - {{ game_guess.0.pk}}</td>
-            {% if game_guess.0.in_progress == True %} 
-                <td class="completion">On Going</td>
-            {% else %}
-                <td class="completion">Completed</td>
-            {% endif %}
-            {% if game_guess.1 == '?' %}
-                <td class="winning-guess">?</td>
-            {% else %}
-                <td class="winning-guess">{{ game_guess.1.0.guess_value }} - {{ game_guess.1.0.guess_date }}</td>
-            {% endif %}
+        {% for game in games %}
+        <tr>
+            <td><a data-test="game-name" href="{% url 'my_game' game.pk %}">Game - {{game.pk}}</a></td>
+            <td data-test="game-progress">{{ game.in_progress }}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -28,17 +28,7 @@ def games(request):
             return redirect(f'/games/{new_game.pk}')
     else:
         all_games = Game.objects.all()
-        game_and_guess = []
-        for game in all_games:
-            winning_guess = Guess.objects.filter(game=game, guess_value=game.winning_num)
-            if winning_guess:
-                game_and_guess.append((game, winning_guess))
-            else:
-                game_and_guess.append((game, '?'))
-        context = {
-            'games_guesses': game_and_guess,
-            'user': user
-        }
+        context = {'games': all_games}
         return render(request, 'games.html', context=context)
 
 

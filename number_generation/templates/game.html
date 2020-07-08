@@ -1,9 +1,4 @@
 {% extends "base.html" %}
-{% if user %}
-    {% block user %}
-    {{ user.username }}
-    {% endblock %}
-{% endif %}
 {% block content %}
 <div class="container">
         <h1>Game {{ game.pk }}</h1>
